@@ -8,6 +8,20 @@ Seven lectures on time series econometrics with applications to finance and mark
 Each lecture comes with Beamer slides, article-class lecture notes, and an applied tutorial
 using publicly available data.
 
+## Citation
+
+To cite this repository, files, or associated materials, use the format shown below, adapting it as needed for the context of your work.
+
+Valls, P. P. (2026). *Time Series Econometrics for Business Research*. https://github.com/pedrovalls/time_series_business.
+
+> @misc{valls2026TimeSeriesEconometricsforBusinessResearch, 
+author = {Valls, Pedro P.}, 
+title = {Time Series Econometrics for Business Research}, 
+year = {2026}, 
+howpublished = {\url{https://github.com/pedrovalls/time_series_business}} 
+}
+
+
 ## Course website
 
 The course page is served at:  
