@@ -14,11 +14,11 @@ To cite this repository, files, or associated materials, use the format shown be
 
 Valls, P. P. (2026). *Time Series Econometrics for Business Research*. https://github.com/pedrovalls/time_series_business.
 
-> @misc{valls2026TimeSeriesEconometricsforBusinessResearch, 
-author = {Valls, Pedro P.}, 
-title = {Time Series Econometrics for Business Research}, 
-year = {2026}, 
-howpublished = {\url{https://github.com/pedrovalls/time_series_business}} 
+> @misc{valls2026TimeSeriesEconometricsforBusinessResearch,  
+author = {Valls, Pedro P.},  
+title = {Time Series Econometrics for Business Research},  
+year = {2026},  
+howpublished = {\url{https://github.com/pedrovalls/time_series_business}}  
 }
 
 
