@@ -29,7 +29,7 @@ The course page is served at:
 
 | # | Case Study | Area | Data Source |
 |---|---|---|---|
-| 1 | Modelling daily USD/BRL exchange rate returns (ARMA) | Finance · FX | Yahoo Finance `BRL=X` |
+| 1 | Modelling daily USD/BRL exchange rate returns (ARMA) | Finance · FX | FRED: 'DEXBZUS' |
 | 2 | Are commodity prices and the BRL integrated? (Unit roots) | Macro · Commodities | FRED: `DCOILBRENTEU`, `GOLDAMGBD228NLBM`, `DEXBZUS` |
 | 3 | Long-run price elasticity in Brazilian retail (ECM) | Marketing · Retail | IBGE PMC + IPCA |
 | 4 | Macro-finance linkages: Brazilian business cycle VAR | Macro · Monetary Policy | FRED: `BRAGDPNADSMEI`, `BRACPIALLMINMEI`, `INTDSRBRZQ156N` |
