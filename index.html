@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Series Econometrics for Business Research — FGV EAESP</title>
+<style>
+  /* ── Variables ──────────────────────────────────────── */
+  :root {
+    --navy:      #04,2c,53; /* fallback */
+    --navy:      #042c53;
+    --midblue:   #185fa5;
+    --lightblue: #e6f1fb;
+    --teal:      #0f6e56;
+    --lightteal: #e1f5ee;
+    --amber:     #854f0b;
+    --coral:     #993c1d;
+    --graylight: #f1efe8;
+    --graymid:   #888780;
+    --graydark:  #444441;
+    --white:     #ffffff;
+    --font-serif: 'Georgia', 'Times New Roman', serif;
+    --font-sans:  'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono:  'Consolas', 'Monaco', monospace;
+    --radius:     6px;
+    --shadow:     0 2px 12px rgba(4,44,83,.10);
+    --shadow-lg:  0 6px 32px rgba(4,44,83,.15);
+  }
+
+  /* ── Reset ──────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--graydark);
+    background: #f8f7f4;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .header-brand {
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #a8c8e8;
+    text-decoration: none;
+  }
+  .header-tag {
+    font-size: .72rem;
+    color: #6a96bb;
+    font-family: var(--font-mono);
+  }
+
+  /* ── Hero ───────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(160deg, var(--navy) 0%, #0b3d6e 55%, #185fa5 100%);
+    color: var(--white);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .hero-institution {
+    font-size: .78rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #7ab4d8;
+    font-weight: 600;
+    margin-bottom: .8rem;
+  }
+  .hero h1 {
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: .6rem;
+    color: var(--white);
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: #a8c8e8;
+    margin-bottom: 1.8rem;
+  }
+  .hero-desc {
+    font-size: .92rem;
+    color: #c5ddf0;
+    max-width: 620px;
+    margin: 0 auto 2.2rem;
+    line-height: 1.75;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: .8rem;
+    color: #7ab4d8;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: .4rem; }
+  .hero-meta svg { opacity: .7; }
+
+  /* ── Pill badges ────────────────────────────────────── */
+  .pill-row {
+    display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center;
+    margin: 1.4rem 0 0;
+  }
+  .pill {
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 20px;
+    padding: .2rem .75rem;
+    font-size: .72rem;
+    color: #c5ddf0;
+    letter-spacing: .04em;
+  }
+
+  /* ── Main content ───────────────────────────────────── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+
+  /* ── Section heading ────────────────────────────────── */
+  .section-heading {
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--midblue);
+    margin-bottom: 1.2rem;
+    padding-bottom: .4rem;
+    border-bottom: 2px solid var(--lightblue);
+  }
+
+  /* ── Tutorial map callout ───────────────────────────── */
+  .callout {
+    background: var(--lightteal);
+    border-left: 4px solid var(--teal);
+    border-radius: var(--radius);
+    padding: 1rem 1.4rem;
+    margin-bottom: 2.8rem;
+    font-size: .88rem;
+    color: #0a4a38;
+  }
+  .callout strong { color: var(--teal); }
+
+  /* ── Course table ───────────────────────────────────── */
+  .course-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 3.5rem;
+    font-size: .875rem;
+  }
+  .course-table thead tr {
+    background: var(--navy);
+    color: var(--white);
+  }
+  .course-table thead th {
+    padding: .85rem 1.1rem;
+    font-weight: 600;
+    font-size: .75rem;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .course-table thead th:first-child { border-radius: 0; width: 7%; }
+  .course-table tbody tr {
+    border-bottom: 1px solid #eceae3;
+    transition: background .15s;
+  }
+  .course-table tbody tr:last-child { border-bottom: none; }
+  .course-table tbody tr:hover { background: #f5f3ee; }
+  .course-table td { padding: .9rem 1.1rem; vertical-align: top; }
+  .lec-num {
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--midblue);
+    background: var(--lightblue);
+    border-radius: 4px;
+    padding: .15rem .45rem;
+    display: inline-block;
+  }
+  .lec-title {
+    font-weight: 600;
+    color: var(--navy);
+    display: block;
+    margin-bottom: .2rem;
+  }
+  .lec-topics {
+    font-size: .78rem;
+    color: var(--graymid);
+    line-height: 1.5;
+  }
+  .lec-topics span {
+    display: inline-block;
+    background: var(--graylight);
+    border-radius: 3px;
+    padding: 0 .4rem;
+    margin: .1rem .1rem .1rem 0;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--graydark);
+  }
+
+  /* ── Document links ─────────────────────────────────── */
+  .doc-links {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .doc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .32rem .75rem;
+    border-radius: 20px;
+    font-size: .77rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .18s;
+    white-space: nowrap;
+    border: 1.5px solid transparent;
+  }
+  .doc-link svg { flex-shrink: 0; }
+  .doc-link-slides {
+    background: var(--navy);
+    color: var(--white);
+    border-color: var(--navy);
+  }
+  .doc-link-slides:hover {
+    background: var(--midblue);
+    border-color: var(--midblue);
+  }
+  .doc-link-notes {
+    background: var(--white);
+    color: var(--midblue);
+    border-color: var(--midblue);
+  }
+  .doc-link-notes:hover {
+    background: var(--lightblue);
+  }
+  .doc-link-tutorial {
+    background: var(--white);
+    color: var(--teal);
+    border-color: var(--teal);
+  }
+  .doc-link-tutorial:hover {
+    background: var(--lightteal);
+  }
+  .doc-link-dash {
+    color: var(--graymid);
+    font-size: .77rem;
+    padding: .32rem .3rem;
+    align-self: center;
+  }
+
+  /* ── Tutorial summary table ─────────────────────────── */
+  .tut-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+    margin-bottom: 3.5rem;
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .tut-table thead tr { background: var(--teal); color: var(--white); }
+  .tut-table thead th {
+    padding: .75rem 1rem;
+    font-size: .73rem;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: left;
+  }
+  .tut-table tbody tr { border-bottom: 1px solid #eceae3; }
+  .tut-table tbody tr:last-child { border-bottom: none; }
+  .tut-table tbody tr:hover { background: #f5f3ee; }
+  .tut-table td { padding: .8rem 1rem; vertical-align: top; }
+  .area-badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 600;
+    border-radius: 3px;
+    padding: .1rem .45rem;
+    margin-bottom: .2rem;
+  }
+  .area-finance { background: #dceeff; color: #0a3a6e; }
+  .area-marketing { background: #fff0dc; color: #6b3a00; }
+  .area-macro { background: #e6f5ee; color: #0a4a38; }
+  .tut-case { font-weight: 600; color: var(--navy); }
+  .tut-data { font-size: .76rem; color: var(--graymid); font-family: var(--font-mono); }
+
+  /* ── Footer ─────────────────────────────────────────── */
+  footer {
+    background: var(--navy);
+    color: #6a96bb;
+    text-align: center;
+    font-size: .78rem;
+    padding: 1.8rem 1rem;
+    line-height: 1.9;
+  }
+  footer a { color: #7ab4d8; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 680px) {
+    .hero h1 { font-size: 1.7rem; }
+    .course-table thead th:nth-child(2) { display: none; }
+    .course-table td:nth-child(2) { display: none; }
+    .doc-links { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Header ────────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <a class="header-brand" href="#">FGV EAESP · Time Series Econometrics</a>
+    <span class="header-tag">MSc / PhD · Business Administration</span>
+  </div>
+</header>
+
+<!-- ── Hero ──────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-institution">FGV EAESP — São Paulo School of Business Administration</div>
+    <h1>Time Series Econometrics<br>for Business Research</h1>
+    <p class="hero-sub">Prof. Pedro Valls Pereira · <a href="/cdn-cgi/l/email-protection#22524746504d0c54434e4e51624445540c4050" style="color:#7ab4d8;text-decoration:none;"><span class="__cf_email__" data-cfemail="4a3a2f2e3825643c2b2626390a2c2d3c642838">[email&#160;protected]</span></a></p>
+    <p class="hero-desc">Seven lectures covering the theory and practice of time series econometrics,
+      from ARMA and unit roots through VAR, structural breaks, GARCH, and modern model-selection methods.
+      Each lecture comes with a set of slides, lecture notes, and an applied tutorial using publicly
+      available data from finance or marketing.</p>
+    <div class="hero-meta">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 11.5V7H5.5v-1.5h3V11.5H7zm0-7.5a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/></svg>
+        7 Lectures × 4 hours
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v8A1.5 1.5 0 0 0 2.5 14h11A1.5 1.5 0 0 0 15 12.5V6.5A1.5 1.5 0 0 0 13.5 5H8.414l-1-1H2.5z"/></svg>
+        Slides · Notes · Tutorials
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm5.5-2.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5z"/></svg>
+        Finance · Marketing · Strategy · Operations
+      </span>
+    </div>
+    <div class="pill-row">
+      <span class="pill">ARMA</span><span class="pill">Unit Roots</span><span class="pill">ECM</span>
+      <span class="pill">VAR / VEC</span><span class="pill">Structural Breaks</span>
+      <span class="pill">Kalman Filter</span><span class="pill">GARCH / DCC</span>
+      <span class="pill">Autometrics</span><span class="pill">LASSO</span><span class="pill">Forecasting</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main ───────────────────────────────────────────────── -->
+<main>
+
+  <!-- Course materials table -->
+  <p class="section-heading">Course Materials</p>
+
+  <div class="callout">
+    <strong>How to use these materials:</strong> each row links to the Beamer <strong>slides</strong>
+    (for the 4-hour lecture), article-class <strong>notes</strong> (for self-study and exam preparation),
+    and a hands-on <strong>tutorial</strong> (applied case study with real data from finance or marketing).
+    All PDFs are compiled from LaTeX source.
+  </div>
+
+  <table class="course-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Topic</th>
+        <th>Documents</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td><span class="lec-num">1</span></td>
+        <td>
+          <span class="lec-title">Stochastic Processes and ARMA Models</span>
+          <div class="lec-topics">
+            <span>Stationarity</span><span>ACF/PACF</span><span>White Noise</span>
+            <span>MA/AR</span><span>ARMA</span><span>Box–Jenkins</span>
+            <span>MLE</span><span>Forecasting</span>
+          </div>
+        </td>
+        <td>
+          <div class="doc-links">
+            <a class="doc-link doc-link-slides" href="Lectures/lecture1_beamer.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+              Slides
+            </a>
+            <a class="doc-link doc-link-notes" href="Notes/lecture1_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+              Notes
+            </a>
+            <a class="doc-link doc-link-tutorial" href="Tutorials/tutorial1_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zm-2.5 0A.5.5 0 0 1 4 8.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 9zm0-3A.5.5 0 0 1 4 5.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 6zm0 6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.5-.5z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"/></svg>
+              Tutorial
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="lec-num">2</span></td>
+        <td>
+          <span class="lec-title">Non-Stationarity: Unit Roots and Trends</span>
+          <div class="lec-topics">
+            <span>I(d)</span><span>Random Walk</span><span>Spurious Regression</span>
+            <span>ADF</span><span>PP</span><span>KPSS</span><span>Perron (1989)</span>
+          </div>
+        </td>
+        <td>
+          <div class="doc-links">
+            <a class="doc-link doc-link-slides" href="Lectures/lecture2_beamer.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 0-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+              Slides
+            </a>
+            <a class="doc-link doc-link-notes" href="Notes/lecture2_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+              Notes
+            </a>
+            <a class="doc-link doc-link-tutorial" href="Tutorials/tutorial2_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zm-2.5 0A.5.5 0 0 1 4 8.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 9zm0-3A.5.5 0 0 1 4 5.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 6zm0 6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.5-.5z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"/></svg>
+              Tutorial
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="lec-num">3</span></td>
+        <td>
+          <span class="lec-title">Dynamic Regression, Error Correction, and Exogeneity</span>
+          <div class="lec-topics">
+            <span>ADL</span><span>ECM</span><span>Cointegration</span>
+            <span>Weak Exogeneity</span><span>Super-Exogeneity</span><span>Lucas Critique</span>
+          </div>
+        </td>
+        <td>
+          <div class="doc-links">
+            <a class="doc-link doc-link-slides" href="Lectures/lecture3_beamer.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 0-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+              Slides
+            </a>
+            <a class="doc-link doc-link-notes" href="Notes/lecture3_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+              Notes
+            </a>
+            <a class="doc-link doc-link-tutorial" href="Tutorials/tutorial3_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zm-2.5 0A.5.5 0 0 1 4 8.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 9zm0-3A.5.5 0 0 1 4 5.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 6zm0 6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.5-.5z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"/></svg>
+              Tutorial
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="lec-num">4</span></td>
+        <td>
+          <span class="lec-title">Multivariate Dynamics: VAR, Cointegration and VEC</span>
+          <div class="lec-topics">
+            <span>VAR(p)</span><span>Granger Causality</span><span>IRF</span>
+            <span>FEVD</span><span>SVAR</span><span>Johansen</span><span>VECM</span>
+          </div>
+        </td>
+        <td>
+          <div class="doc-links">
+            <a class="doc-link doc-link-slides" href="Lectures/lecture4_beamer.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 0-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+              Slides
+            </a>
+            <a class="doc-link doc-link-notes" href="Notes/lecture4_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+              Notes
+            </a>
+            <a class="doc-link doc-link-tutorial" href="Tutorials/tutorial4_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zm-2.5 0A.5.5 0 0 1 4 8.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 9zm0-3A.5.5 0 0 1 4 5.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 6zm0 6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.5-.5z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"/></svg>
+              Tutorial
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="lec-num">5</span></td>
+        <td>
+          <span class="lec-title">Structural Breaks, State Space and the Kalman Filter</span>
+          <div class="lec-topics">
+            <span>Chow</span><span>CUSUM</span><span>Bai–Perron</span>
+            <span>IIS</span><span>State Space</span><span>Kalman Filter</span><span>TVP</span>
+          </div>
+        </td>
+        <td>
+          <div class="doc-links">
+            <a class="doc-link doc-link-slides" href="Lectures/lecture5_beamer.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 0-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+              Slides
+            </a>
+            <a class="doc-link doc-link-notes" href="Notes/lecture5_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+              Notes
+            </a>
+            <a class="doc-link doc-link-tutorial" href="Tutorials/tutorial5_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zm-2.5 0A.5.5 0 0 1 4 8.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 9zm0-3A.5.5 0 0 1 4 5.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 6zm0 6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.5-.5z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"/></svg>
+              Tutorial
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="lec-num">6</span></td>
+        <td>
+          <span class="lec-title">Volatility Modelling: ARCH, GARCH and Multivariate Extensions</span>
+          <div class="lec-topics">
+            <span>ARCH</span><span>GARCH(1,1)</span><span>EGARCH</span>
+            <span>GJR</span><span>DCC</span><span>VaR</span><span>Expected Shortfall</span>
+          </div>
+        </td>
+        <td>
+          <div class="doc-links">
+            <a class="doc-link doc-link-slides" href="Lectures/lecture6_beamer.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 0-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+              Slides
+            </a>
+            <a class="doc-link doc-link-notes" href="Notes/lecture6_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+              Notes
+            </a>
+            <a class="doc-link doc-link-tutorial" href="Tutorials/tutorial6_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zm-2.5 0A.5.5 0 0 1 4 8.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 9zm0-3A.5.5 0 0 1 4 5.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 6zm0 6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.5-.5z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"/></svg>
+              Tutorial
+            </a>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="lec-num">7</span></td>
+        <td>
+          <span class="lec-title">Forecasting and Model Selection</span>
+          <div class="lec-topics">
+            <span>MSFE</span><span>Diebold–Mariano</span><span>GETS</span>
+            <span>Autometrics</span><span>IIS</span><span>LASSO</span><span>Combination</span>
+          </div>
+        </td>
+        <td>
+          <div class="doc-links">
+            <a class="doc-link doc-link-slides" href="Lectures/lecture7_beamer.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 0-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+              Slides
+            </a>
+            <a class="doc-link doc-link-notes" href="Notes/lecture7_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/><path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/></svg>
+              Notes
+            </a>
+            <a class="doc-link doc-link-tutorial" href="Tutorials/tutorial7_timeseries.pdf">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6 9a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 9zm-2.5 0A.5.5 0 0 1 4 8.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 9zm0-3A.5.5 0 0 1 4 5.5h.5a.5.5 0 0 1 0 1H4A.5.5 0 0 1 3.5 6zm0 6a.5.5 0 0 1 .5-.5h.5a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.5-.5z"/><path d="M2 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h12z"/></svg>
+              Tutorial
+            </a>
+          </div>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- Tutorial case study summary -->
+  <p class="section-heading">Tutorial Case Studies at a Glance</p>
+
+  <table class="tut-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Case Study</th>
+        <th>Area</th>
+        <th>Data Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td><span class="tut-case">Modelling Daily USD/BRL Exchange Rate Returns</span><br>
+            ARMA identification, MLE, out-of-sample forecasting, ARCH pre-test</td>
+        <td><span class="area-badge area-finance">Finance · FX</span></td>
+        <td><span class="tut-data">Yahoo Finance (BRL=X) via quantmod / yfinance</span></td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td><span class="tut-case">Are Commodity Prices and the BRL Integrated?</span><br>
+            ADF / KPSS / Zivot–Andrews, spurious regression detection</td>
+        <td><span class="area-badge area-macro">Macro · Commodities</span></td>
+        <td><span class="tut-data">FRED: DCOILBRENTEU, GOLDAMGBD228NLBM, DEXBZUS</span></td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td><span class="tut-case">Long-Run Price Elasticity in Brazilian Retail</span><br>
+            ADL, Engle–Granger cointegration, ECM, weak exogeneity test</td>
+        <td><span class="area-badge area-marketing">Marketing · Retail</span></td>
+        <td><span class="tut-data">IBGE PMC (retail volume) + IPCA (price index)</span></td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td><span class="tut-case">Macro-Finance Linkages: Brazilian Business Cycle VAR</span><br>
+            VAR, Granger causality, Cholesky IRFs, FEVD, monetary policy</td>
+        <td><span class="area-badge area-macro">Macro · Monetary Policy</span></td>
+        <td><span class="tut-data">FRED: BRAGDPNADSMEI, BRACPIALLMINMEI, INTDSRBRZQ156N</span></td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td><span class="tut-case">Structural Breaks in Brazilian Inflation</span><br>
+            Bai–Perron, CUSUM, IIS, TVP Kalman filter for persistence</td>
+        <td><span class="area-badge area-macro">Macro · Inflation</span></td>
+        <td><span class="tut-data">FRED: BRACPIALLMINMEI (1980–2024)</span></td>
+      </tr>
+      <tr>
+        <td><strong>6</strong></td>
+        <td><span class="tut-case">IBOVESPA GARCH, VaR Backtesting and DCC</span><br>
+            GARCH / GJR / EGARCH, VaR, Kupiec test, DCC with S&amp;P 500</td>
+        <td><span class="area-badge area-finance">Finance · Equity Risk</span></td>
+        <td><span class="tut-data">Yahoo Finance: ^BVSP, ^GSPC via quantmod / yfinance</span></td>
+      </tr>
+      <tr>
+        <td><strong>7</strong></td>
+        <td><span class="tut-case">Consumer Goods Demand Forecasting and Combination</span><br>
+            ARIMA vs ETS, Diebold–Mariano test, forecast combination, M3/M5 data</td>
+        <td><span class="area-badge area-marketing">Marketing · Demand</span></td>
+        <td><span class="tut-data">R package Mcomp (M3) or Kaggle M5 competition data</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</main>
+
+<!-- ── Footer ─────────────────────────────────────────────── -->
+<footer>
+  <div>
+    Course material for educational purposes only. Nothing here constitutes financial, investment, or legal advice.<br>
+    &copy; 2025 Pedro Valls Pereira &nbsp;&middot;&nbsp;
+    FGV EAESP &nbsp;&middot;&nbsp;
+    <a href="/cdn-cgi/l/email-protection#ee9e8b8a9c81c0988f82829dae888998c08c9c"><span class="__cf_emai
